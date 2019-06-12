@@ -1,0 +1,219 @@
+{
+	"MS SQL SPROC": {
+		"prefix": "mssproc",
+		"body": [
+			"IF OBJECT_ID('$3', 'P') IS NOT NULL",
+			"    DROP PROCEDURE $3;",
+			"GO",
+			"-- =======================================",
+			"-- Author:      Cliff Spital",
+			"-- Create date: $1",
+			"-- Description: $2",
+			"-- =======================================",
+			"CREATE PROCEDURE $3",
+			"    $4",
+			"AS",
+			"BEGIN",
+			"    SET NOCOUNT ON",
+			"",
+			"",
+			"END",
+			"GO"
+		],
+		"description": "Stubs out a new stored procedure."
+	},
+	"MS SQL TABLE TYPE": {
+		"prefix": "msttype",
+		"body": [
+			"IF TYPE_ID('[$1].[$2]') IS NOT NULL",
+			"    DROP TYPE [$1].[$2];",
+			"GO",
+			"CREATE TYPE [$1].[$2] AS TABLE",
+			"(",
+			"    $3",
+			")",
+			"GO"
+		],
+		"description": "Stubs out a new table type."
+	},
+	"MS SQL TYPE": {
+		"prefix": "msdtype",
+		"body": [
+			"CREATE TYPE [$1].[$2]",
+			"FROM $3",
+			"GO"
+		],
+		"description": "Stubs out a new type."
+	},
+	"MS SQL TABLE": {
+		"prefix": "mstbl",
+		"body": [
+			"IF OBJECT_ID('$1.$2') IS NOT NULL",
+			"    DROP TABLE $1.$2;",
+			"GO",
+			"CREATE TABLE [$1].[$2]",
+			"(",
+			"    $3",
+			") ON [PRIMARY]",
+			"GO"
+		],
+		"description": "Stubs out a new table"
+	},
+	"MS FOREIGN KEY": {
+		"prefix": "msfkey",
+		"body": [
+			"IF EXISTS (SELECT 1 FROM sys.objects WHERE name = 'FK_$2_$3' and [type] = 'F')",
+			"    ALTER TABLE [$1].[$2] DROP CONSTRAINT FK_$2_$3",
+			"GO",
+			"ALTER TABLE [$1].[$2]",
+			"ADD CONSTRAINT [FK_$2_$3] FOREIGN KEY([$3])",
+			"REFERENCES [$4].[$5] ([$6])",
+			"GO"
+		],
+		"description": "Stubs out a new foreign key constraint"
+	},
+	"MS PRIMARY KEY": {
+		"prefix": "mspkey",
+		"body": [
+			"ALTER TABLE [$1].[$2] ADD CONSTRAINT [PK_$2$3] PRIMARY KEY CLUSTERED",
+			"(",
+			"    $4",
+			") ON [PRIMARY]",
+			"GO"
+		],
+		"description": "Stubs out a new primary key constraint"
+	},
+	"MS INDEX": {
+		"prefix": "msindex",
+		"body": [
+			"CREATE INDEX IX_$1_$4 ON [$2].[$1] ([$4]);",
+			"GO"
+		],
+		"description": "Stubs out a new nonclustered index"
+	},
+	"MS UNIQUE INDEX": {
+		"prefix": "msuniq",
+		"body": [
+			"IF EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IXUniq_$2_$3')",
+			"    DROP INDEX [IXUniq_$2_$3] ON [$1].[$2]",
+			"GO",
+			"CREATE UNIQUE INDEX IXUniq_$2_$3 ON [$1].[$2]($3);",
+			"GO"
+		],
+		"description": "Stubs out a new unique index"
+	},
+	"MS SCALAR FUNCTION": {
+		"prefix": "msfns",
+		"body": [
+			"IF OBJECT_ID('$3') IS NOT NULL",
+    		"    DROP FUNCTION $3;",
+			"GO",
+			"-- =======================================",
+			"-- Author:      Cliff Spital",
+			"-- Create date: $1",
+			"-- Description: $2",
+			"-- =======================================",
+			"CREATE FUNCTION $3",
+			"(",
+			"    $4",
+			")",
+			"RETURNS $5",
+			"AS",
+			"BEGIN",
+			"",
+			"",
+			"END",
+			"GO"
+		],
+		"description": "Stubs out a new Scalar function"
+	},
+	"MS IF": {
+		"prefix": "msif",
+		"body": [
+			"IF ($1)",
+			"BEGIN;",
+			"    $2",
+			"END;"
+		]
+	},
+	"MS TABLE MULTILINE FUNCTION":{
+		"prefix": "msfnt",
+		"body": [
+			"IF OBJECT_ID('$3') IS NOT NULL",
+    		"    DROP FUNCTION $3;",
+			"GO",
+			"-- =======================================",
+			"-- Author:      Cliff Spital",
+			"-- Create date: $1",
+			"-- Description: $2",
+			"-- =======================================",
+			"CREATE FUNCTION $3",
+			"(",
+			"    $4",
+			")",
+			"RETURNS $5 TABLE (",
+			"$6",
+			")",
+			"AS",
+			"BEGIN",
+			"",
+			"",
+			"END",
+			"GO"
+		],
+		"description": "Stubs out a new multi-line Scalar function"
+	},
+	"MS DEFAULT": {
+		"prefix": "msdf",
+		"body": [
+			"ALTER TABLE [$1].[$2]",
+			"ADD CONSTRAINT DF_$2_$3 DEFAULT ($4) FOR [$3]",
+			"GO"
+		],
+		"description": "Stubs out a new default constraint"
+	},
+	"MS CHECK CONSTRAINT": {
+		"prefix": "msck",
+		"body": [
+			"ALTER TABLE [$1].[$2]",
+			"WITH CHECK ADD CONSTRAINT CK_$2_$3 CHECK (([$3]=$4))",
+			"GO"
+		],
+		"description": "Stubs out a new check constraint"
+	},
+	"MS TRAN TRY": {
+		"prefix": "mstrytx",
+		"body": [
+			"BEGIN TRAN;",
+			"BEGIN TRY",
+			"    $1",
+			"    COMMIT;",
+			"END TRY",
+			"BEGIN CATCH",
+			"    ROLLBACK;",
+			"    THROW;",
+			"END CATCH;"
+		],
+		"description": "stubs out a new try in transaction block"
+	},
+	"TODO": {
+		"prefix": "TODO",
+		"body": "-- TODO(cspital) ",
+		"description": "Stubs out an empty TODO"
+	},
+	"NOTE": {
+		"prefix": "NOTE",
+		"body": "-- NOTE(cspital) ",
+		"description": "Stubs out an empty NOTE"
+	},
+	"XXX": {
+		"prefix": "XXX",
+		"body": "-- XXX(cspital) ",
+		"description": "Stubs out an empty XXX"
+	},
+	"FIXME": {
+		"prefix": "FIXME",
+		"body": "-- FIXME(cspital) ",
+		"description": "Stubs out an empty FIXME"
+	}
+}
